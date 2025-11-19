@@ -1,0 +1,132 @@
+.home-container {
+  min-height: 100vh;
+  background-color: #1a1a1a;
+}
+
+.hero {
+  background: linear-gradient(135deg, #4a9eff 0%, #2d5aa0 100%);
+  padding: 4rem 2rem;
+  text-align: center;
+  color: white;
+}
+
+.hero-content h1 {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+  font-weight: 700;
+}
+
+.hero-content p {
+  font-size: 1.2rem;
+  margin-bottom: 2rem;
+  opacity: 0.9;
+}
+
+.cta-button {
+  display: inline-block;
+  background-color: white;
+  color: #4a9eff;
+  padding: 0.75rem 2rem;
+  border-radius: 4px;
+  text-decoration: none;
+  font-weight: 600;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.cta-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+}
+
+.content-wrapper {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+  display: grid;
+  grid-template-columns: 1fr 300px;
+  gap: 2rem;
+}
+
+.games-section h2 {
+  color: #4a9eff;
+  font-size: 1.8rem;
+  margin-bottom: 2rem;
+}
+
+.games-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 1.5rem;
+}
+
+.loading,
+.error-message,
+.no-games {
+  padding: 2rem;
+  text-align: center;
+  color: #a0a0a0;
+  background-color: #242424;
+  border-radius: 8px;
+  grid-column: 1 / -1;
+}
+
+.error-message {
+  background-color: #3d1f1f;
+  color: #ff6b6b;
+}
+
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.sidebar-card {
+  background-color: #242424;
+  border: 1px solid #3a3a3a;
+  border-radius: 8px;
+  padding: 1.5rem;
+}
+
+.sidebar-card h3 {
+  color: #4a9eff;
+  margin-bottom: 1rem;
+  font-size: 1.1rem;
+}
+
+.stat {
+  color: #e0e0e0;
+  margin-bottom: 1rem;
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+.sidebar-button {
+  display: block;
+  background-color: #4a9eff;
+  color: white;
+  padding: 0.75rem 1rem;
+  border-radius: 4px;
+  text-decoration: none;
+  text-align: center;
+  font-weight: 600;
+  transition: background-color 0.3s ease;
+}
+
+.sidebar-button:hover {
+  background-color: #66b3ff;
+}
+
+@media (max-width: 768px) {
+  .content-wrapper {
+    grid-template-columns: 1fr;
+  }
+
+  .hero-content h1 {
+    font-size: 1.8rem;
+  }
+
+  .games-grid {
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  }
+}

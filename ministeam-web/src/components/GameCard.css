@@ -1,0 +1,136 @@
+.game-card {
+  display: flex;
+  flex-direction: column;
+  background-color: #242424;
+  border: 1px solid #3a3a3a;
+  border-radius: 8px;
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  text-decoration: none;
+  color: inherit;
+  height: 100%;
+}
+
+.game-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 12px 24px rgba(74, 158, 255, 0.2);
+  border-color: #4a9eff;
+}
+
+.game-image {
+  position: relative;
+  overflow: hidden;
+  padding-top: 140%;
+  background-color: #1a1a1a;
+}
+
+.game-image img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.game-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-end;
+  padding: 0.75rem;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.game-card:hover .game-overlay {
+  opacity: 1;
+}
+
+.wishlist-btn {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+  opacity: 0.7;
+}
+
+.wishlist-btn:hover,
+.wishlist-btn.active {
+  transform: scale(1.2);
+  opacity: 1;
+}
+
+.game-info {
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+
+.game-info h3 {
+  color: #e0e0e0;
+  margin: 0 0 0.5rem 0;
+  font-size: 0.95rem;
+  line-height: 1.3;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.genre {
+  color: #a0a0a0;
+  font-size: 0.8rem;
+  margin: 0 0 0.75rem 0;
+}
+
+.game-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: auto;
+}
+
+.price {
+  color: #4a9eff;
+  font-weight: 600;
+  font-size: 1.1rem;
+}
+
+.add-to-cart-btn {
+  background-color: #3a3a3a;
+  border: 1px solid #4a9eff;
+  color: #4a9eff;
+  padding: 0.4rem 0.6rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.add-to-cart-btn:hover {
+  background-color: #4a9eff;
+  color: white;
+}
+
+.add-to-cart-btn.in-cart {
+  background-color: #4a9eff;
+  color: white;
+}
+
+@media (max-width: 480px) {
+  .game-image {
+    padding-top: 150%;
+  }
+
+  .game-info h3 {
+    font-size: 0.85rem;
+  }
+}

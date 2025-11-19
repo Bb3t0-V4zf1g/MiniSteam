@@ -1,0 +1,137 @@
+.navbar {
+  background-color: #1a1a1a;
+  padding: 1rem 0;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.navbar-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.navbar-brand {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #4a9eff;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.navbar-brand:hover {
+  color: #66b3ff;
+}
+
+.nav-menu {
+  display: flex;
+  list-style: none;
+  gap: 2rem;
+  align-items: center;
+  margin: 0;
+  padding: 0;
+}
+
+.nav-menu a {
+  color: #e0e0e0;
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.3s ease;
+}
+
+.nav-menu a:hover {
+  color: #4a9eff;
+}
+
+.auth-link {
+  color: #e0e0e0;
+}
+
+.auth-link-primary {
+  background-color: #4a9eff;
+  color: white !important;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  transition: background-color 0.3s ease;
+}
+
+.auth-link-primary:hover {
+  background-color: #66b3ff;
+}
+
+.cart-link {
+  background-color: rgba(74, 158, 255, 0.2);
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  border: 1px solid #4a9eff;
+}
+
+.user-dropdown {
+  position: relative;
+}
+
+.user-dropdown > span {
+  color: #e0e0e0;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.dropdown-menu {
+  display: none;
+  position: absolute;
+  top: 100%;
+  right: 0;
+  background-color: #2a2a2a;
+  border: 1px solid #4a9eff;
+  border-radius: 4px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+  margin-top: 0.5rem;
+  min-width: 150px;
+}
+
+.user-dropdown:hover .dropdown-menu {
+  display: flex;
+  flex-direction: column;
+}
+
+.dropdown-menu a,
+.dropdown-menu button {
+  color: #e0e0e0;
+  padding: 0.75rem 1rem;
+  text-decoration: none;
+  text-align: left;
+  border: none;
+  background: none;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: background-color 0.3s ease;
+}
+
+.dropdown-menu a:hover,
+.dropdown-menu button:hover {
+  background-color: #3a3a3a;
+  color: #4a9eff;
+}
+
+.logout-btn {
+  width: 100%;
+  text-align: left;
+}
+
+@media (max-width: 768px) {
+  .nav-menu {
+    gap: 1rem;
+    font-size: 0.9rem;
+  }
+
+  .navbar-brand {
+    font-size: 1.2rem;
+  }
+}
