@@ -187,7 +187,7 @@ const userRepository = {
       FROM usuarios u
       LEFT JOIN compras c ON u.id_usuario = c.id_usuario AND c.estado_pago = 'completado'
       LEFT JOIN biblioteca_usuario b ON u.id_usuario = b.id_usuario
-      LEFT JOIN reseñas r ON u.id_usuario = r.id_usuario
+      LEFT JOIN resenas r ON u.id_usuario = r.id_usuario
       LEFT JOIN carrito ca ON u.id_usuario = ca.id_usuario
       LEFT JOIN lista_deseos l ON u.id_usuario = l.id_usuario
       WHERE u.id_usuario = ?

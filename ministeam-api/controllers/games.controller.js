@@ -9,6 +9,7 @@ const getAllGames = async (req, res) => {
       plataforma,
       precio_min,
       precio_max,
+      id_genero,
       activo = 'true',
       sort = 'fecha_agregado',
       order = 'DESC'
@@ -20,6 +21,7 @@ const getAllGames = async (req, res) => {
       plataforma,
       precio_min: precio_min ? parseFloat(precio_min) : undefined,
       precio_max: precio_max ? parseFloat(precio_max) : undefined,
+      id_genero: id_genero ? parseInt(id_genero) : undefined,
       activo: activo === 'true' ? true : activo === 'false' ? false : undefined,
       sort,
       order
@@ -33,16 +35,23 @@ const getAllGames = async (req, res) => {
   }
 };
 
-// Obtener juego por ID
+// Obtener juego por ID o slug
 const getGameById = async (req, res) => {
   try {
     const { id } = req.params;
+    
+    // Intentar convertir a número
     const gameId = parseInt(id);
-    if (isNaN(gameId)) {
-      return res.status(400).json({ error: 'ID inválido' });
+    let game;
+    
+    // Si es un número válido, buscar por ID
+    if (!isNaN(gameId)) {
+      game = await gameRepository.findById(gameId);
+    } else {
+      // Si no es un número, buscar por slug
+      game = await gameRepository.findBySlug(id);
     }
-
-    const game = await gameRepository.findById(gameId);
+    
     if (!game) {
       return res.status(404).json({ error: 'Videojuego no encontrado' });
     }
@@ -246,7 +255,6 @@ const getFeaturedGames = async (req, res) => {
 module.exports = {
   getAllGames,
   getGameById,
-  getGameBySlug,
   createGame,
   updateGame,
   deleteGame,

@@ -92,6 +92,18 @@ export const useCartStore = create((set, get) => ({
   setLoading: (loading) => set({ isLoading: loading }),
   setError: (error) => set({ error }),
 
+  loadCart: async () => {
+    try {
+      const { cartAPI } = await import('../services/api');
+      set({ isLoading: true });
+      const response = await cartAPI.get();
+      set({ items: response.data.items || [], isLoading: false });
+    } catch (error) {
+      console.error('Error cargando carrito:', error);
+      set({ error: error.message, isLoading: false });
+    }
+  },
+
   addItem: (game) => {
     const { items } = get();
     const exists = items.find((item) => item.id_juego === game.id_juego || item.id === game.id);
@@ -123,6 +135,18 @@ export const useWishlistStore = create((set, get) => ({
   setItems: (items) => set({ items }),
   setLoading: (loading) => set({ isLoading: loading }),
   setError: (error) => set({ error }),
+
+  loadWishlist: async () => {
+    try {
+      const { wishlistAPI } = await import('../services/api');
+      set({ isLoading: true });
+      const response = await wishlistAPI.get();
+      set({ items: response.data.items || [], isLoading: false });
+    } catch (error) {
+      console.error('Error cargando wishlist:', error);
+      set({ error: error.message, isLoading: false });
+    }
+  },
 
   addItem: (game) => {
     const { items } = get();

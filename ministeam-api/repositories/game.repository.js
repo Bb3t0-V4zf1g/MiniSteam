@@ -36,7 +36,7 @@ const gameRepository = {
         v.*,
         g.nombre as genero_nombre,
         g.descripcion as genero_descripcion,
-        (SELECT COUNT(*) FROM reseñas WHERE id_juego = v.id_juego) as total_reseñas
+        (SELECT COUNT(*) FROM resenas WHERE id_juego = v.id_juego) as total_reseñas
       FROM videojuegos v
       LEFT JOIN genero_videojuego g ON v.id_genero = g.id_genero
       WHERE v.id_juego = ?
@@ -62,7 +62,7 @@ const gameRepository = {
         v.*,
         g.nombre as genero_nombre,
         g.descripcion as genero_descripcion,
-        (SELECT COUNT(*) FROM reseñas WHERE id_juego = v.id_juego) as total_reseñas
+        (SELECT COUNT(*) FROM resenas WHERE id_juego = v.id_juego) as total_reseñas
       FROM videojuegos v
       LEFT JOIN genero_videojuego g ON v.id_genero = g.id_genero
       WHERE v.slug = ?
@@ -105,6 +105,7 @@ const gameRepository = {
       plataforma,
       precio_min,
       precio_max,
+      id_genero,
       activo = true,
       sort = 'fecha_agregado',
       order = 'DESC'
@@ -126,6 +127,11 @@ const gameRepository = {
     if (plataforma) {
       whereConditions.push('v.plataforma = ?');
       params.push(plataforma);
+    }
+
+    if (id_genero) {
+      whereConditions.push('v.id_genero = ?');
+      params.push(parseInt(id_genero));
     }
 
     if (precio_min !== undefined) {
@@ -156,7 +162,7 @@ const gameRepository = {
         v.desarrollador, v.plataforma, v.calificacion_promedio,
         v.clasificacion_edad, v.stock, v.activo,
         g.nombre as genero_nombre,
-        (SELECT COUNT(*) FROM reseñas WHERE id_juego = v.id_juego) as total_reseñas
+        (SELECT COUNT(*) FROM resenas WHERE id_juego = v.id_juego) as total_reseñas
       FROM videojuegos v
       LEFT JOIN genero_videojuego g ON v.id_genero = g.id_genero
       ${whereClause}
@@ -178,7 +184,7 @@ const gameRepository = {
     const [countResult] = await db.execute(countQuery, params);
 
     return {
-      games: rows,
+      juegos: rows,
       pagination: {
         page,
         limit,
@@ -237,7 +243,7 @@ const gameRepository = {
     ]);
 
     return {
-      games: rows,
+      juegos: rows,
       searchTerm,
       pagination: {
         page,
@@ -277,7 +283,7 @@ const gameRepository = {
     const [countResult] = await db.execute(countQuery, [genreId]);
 
     return {
-      games: rows,
+      juegos: rows,
       pagination: {
         page,
         limit,
@@ -294,7 +300,7 @@ const gameRepository = {
         v.id_juego, v.slug, v.titulo, v.precio,
         v.imagen_url, v.desarrollador, v.calificacion_promedio,
         g.nombre as genero_nombre,
-        (SELECT COUNT(*) FROM reseñas WHERE id_juego = v.id_juego) as total_reseñas
+        (SELECT COUNT(*) FROM resenas WHERE id_juego = v.id_juego) as total_reseñas
       FROM videojuegos v
       LEFT JOIN genero_videojuego g ON v.id_genero = g.id_genero
       WHERE v.activo = true

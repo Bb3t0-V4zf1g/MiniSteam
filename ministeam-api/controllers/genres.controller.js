@@ -5,7 +5,7 @@ const genreRepository = require('../repositories/genre.repository');
 const getAllGenres = async (req, res) => {
   try {
     const genres = await genreRepository.findAll();
-    res.json(genres);
+    res.json({ generos: genres });
   }catch (error) {
     console.error('Error en getAllGenres:', error);
     res.status(500).json({ error: 'Error al obtener los generos' });

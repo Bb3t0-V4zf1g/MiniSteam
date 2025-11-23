@@ -52,20 +52,51 @@ export default function Search() {
       const params = {
         page,
         limit: 12,
+        activo: true
       };
 
-      if (searchTerm) params.nombre = searchTerm;
+      if (searchTerm) params.q = searchTerm;
       if (selectedGenre) params.id_genero = selectedGenre;
-      if (minPrice || maxPrice) {
-        params.minPrice = minPrice;
-        params.maxPrice = maxPrice;
+      if (minPrice) params.precio_min = minPrice;
+      if (maxPrice) params.precio_max = maxPrice;
+      
+      // Mapear sortBy a los valores que acepta el backend
+      if (sortBy) {
+        switch(sortBy) {
+          case 'recent':
+            params.sort = 'fecha_agregado';
+            params.order = 'DESC';
+            break;
+          case 'price-asc':
+            params.sort = 'precio';
+            params.order = 'ASC';
+            break;
+          case 'price-desc':
+            params.sort = 'precio';
+            params.order = 'DESC';
+            break;
+          case 'rating':
+            params.sort = 'calificacion_promedio';
+            params.order = 'DESC';
+            break;
+          case 'name':
+            params.sort = 'titulo';
+            params.order = 'ASC';
+            break;
+        }
       }
-      if (sortBy) params.sort = sortBy;
 
-      const response = await gamesAPI.getAll(page, 12, params);
-      const juegos = response.data.juegos || [];
+      // Si hay término de búsqueda, usar el endpoint de búsqueda
+      let response;
+      if (searchTerm) {
+        response = await gamesAPI.search(searchTerm, { page, limit: 12 });
+      } else {
+        response = await gamesAPI.getAll(page, 12, params);
+      }
+      
+      const juegos = response.data.juegos || response.data.games || [];
       setGames(juegos);
-      setTotalPages(response.data.totalPages || 1);
+      setTotalPages(response.data.pagination?.totalPages || 1);
       setCurrentPage(page);
 
       // Actualizar URL

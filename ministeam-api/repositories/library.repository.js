@@ -18,72 +18,83 @@ const libraryRepository = {
 
   // Obtener biblioteca del usuario
   async getUserLibrary(userId, filters = {}) {
-    const {
-      page = 1,
-      limit = 20,
-      estado_actual,
-      sort = 'fecha_adquirido',
-      order = 'DESC'
-    } = filters;
+    try {
+      const {
+        page = 1,
+        limit = 20,
+        estado_actual,
+        sort = 'fecha_adquirido',
+        order = 'DESC'
+      } = filters;
 
-    const offset = (page - 1) * limit;
-    const params = [userId];
-    let whereClause = 'WHERE b.id_usuario = ?';
+      const offset = (page - 1) * limit;
+      const params = [userId];
+      let whereClause = 'WHERE b.id_usuario = ?';
 
-    if (estado_actual) {
-      whereClause += ' AND b.estado_actual = ?';
-      params.push(estado_actual);
-    }
-
-    const validSortColumns = ['fecha_adquirido', 'tiempo_jugado', 'titulo'];
-    const sortColumn = validSortColumns.includes(sort) ? sort : 'fecha_adquirido';
-    const sortOrder = order.toUpperCase() === 'ASC' ? 'ASC' : 'DESC';
-
-    const query = `
-      SELECT 
-        b.id_biblioteca,
-        b.id_juego,
-        b.fecha_adquirido,
-        b.estado_actual,
-        b.tiempo_jugado,
-        v.titulo,
-        v.slug,
-        v.imagen_url,
-        v.desarrollador,
-        v.plataforma,
-        v.calificacion_promedio,
-        g.nombre as genero,
-        c.fecha_compra
-      FROM biblioteca_usuario b
-      JOIN videojuegos v ON b.id_juego = v.id_juego
-      LEFT JOIN genero_videojuego g ON v.id_genero = g.id_genero
-      JOIN compras c ON b.id_compra = c.id_compra
-      ${whereClause}
-      ORDER BY ${sortColumn === 'titulo' ? 'v.titulo' : 'b.' + sortColumn} ${sortOrder}
-      LIMIT ? OFFSET ?
-    `;
-
-    params.push(limit, offset);
-    const [rows] = await db.execute(query, params);
-
-    // Contar total
-    const countQuery = `
-      SELECT COUNT(*) as total
-      FROM biblioteca_usuario b
-      ${whereClause}
-    `;
-
-    const [countResult] = await db.execute(countQuery, params.slice(0, -2));
-
-    return {
-      games: rows,
-      pagination: {
-        page,
-        limit,
-        total: countResult[0].total,
-        totalPages: Math.ceil(countResult[0].total / limit)
+      if (estado_actual) {
+        whereClause += ' AND b.estado_actual = ?';
+        params.push(estado_actual);
       }
-    };
+
+      const validSortColumns = ['fecha_adquirido', 'tiempo_jugado', 'titulo'];
+      const sortColumn = validSortColumns.includes(sort) ? sort : 'fecha_adquirido';
+      const sortOrder = order.toUpperCase() === 'ASC' ? 'ASC' : 'DESC';
+
+      const query = `
+        SELECT 
+          b.id_biblioteca,
+          b.id_juego,
+          b.fecha_adquirido,
+          b.estado_actual,
+          b.tiempo_jugado,
+          v.titulo,
+          v.slug,
+          v.imagen_url,
+          v.desarrollador,
+          v.plataforma,
+          v.calificacion_promedio,
+          g.nombre as genero_nombre,
+          c.fecha_compra
+        FROM biblioteca_usuario b
+        JOIN videojuegos v ON b.id_juego = v.id_juego
+        LEFT JOIN genero_videojuego g ON v.id_genero = g.id_genero
+        LEFT JOIN compras c ON b.id_compra = c.id_compra
+        ${whereClause}
+        ORDER BY ${sortColumn === 'titulo' ? 'v.titulo' : 'b.' + sortColumn} ${sortOrder}
+        LIMIT ${limit} OFFSET ${offset}
+      `;
+
+      console.log('📚 Query biblioteca:', query);
+      console.log('📚 Params:', params);
+      console.log('📚 userId:', userId);
+
+      const [rows] = await db.execute(query, params);
+
+      console.log('📚 Rows encontrados:', rows.length);
+
+      // Contar total
+      const countQuery = `
+        SELECT COUNT(*) as total
+        FROM biblioteca_usuario b
+        ${whereClause}
+      `;
+
+      const countParams = params.slice(0, whereClause.includes('estado_actual') ? 2 : 1);
+      const [countResult] = await db.execute(countQuery, countParams);
+
+      return {
+        juegos: rows,
+        pagination: {
+          page,
+          limit,
+          total: countResult[0].total,
+          totalPages: Math.ceil(countResult[0].total / limit)
+        }
+      };
+    } catch (error) {
+      console.error('❌ Error en getUserLibrary repository:', error);
+      throw error;
+    }
   },
 
   // Obtener detalles de un juego en la biblioteca
@@ -103,14 +114,14 @@ const libraryRepository = {
         v.plataforma,
         v.clasificacion_edad,
         v.calificacion_promedio,
-        g.nombre as genero,
+        g.nombre as genero_nombre,
         g.descripcion as genero_descripcion,
         c.fecha_compra,
         c.total as precio_pagado_compra
       FROM biblioteca_usuario b
       JOIN videojuegos v ON b.id_juego = v.id_juego
       LEFT JOIN genero_videojuego g ON v.id_genero = g.id_genero
-      JOIN compras c ON b.id_compra = c.id_compra
+      LEFT JOIN compras c ON b.id_compra = c.id_compra
       WHERE b.id_usuario = ? AND b.id_juego = ?
     `;
 

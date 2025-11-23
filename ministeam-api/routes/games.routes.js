@@ -3,7 +3,6 @@ const router = express.Router();
 const {
   getAllGames,
   getGameById,
-  getGameBySlug,
   createGame,
   updateGame,
   deleteGame,
@@ -20,8 +19,7 @@ router.get('/search', searchGames);
 router.get('/top-rated', getTopRatedGames);
 router.get('/featured', getFeaturedGames);
 router.get('/genre/:genreId', getGamesByGenre);
-router.get('/id/:id', getGameById);
-router.get('/:slug', getGameBySlug);
+router.get('/:id', getGameById); // Acepta tanto ID numérico como slug
 
 // Rutas de administrador
 router.post('/admin', authenticateToken, isAdmin, createGame);
